@@ -1,4 +1,4 @@
-# Causal & Graphical Models — Mini Project
+# Causal & Graphical Models
 **Course Project — Carnegie Mellon University, 10-701 Machine Learning**
 
 This repository contains a small, self-contained project exploring the interface between **probabilistic graphical models** and **causal inference** using a simple chain DAG (A→B→C). It was developed to accompany course material on Bayesian networks, conditional independence, and causal identification.
