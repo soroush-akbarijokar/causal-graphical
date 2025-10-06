@@ -1,35 +1,39 @@
 # Causal & Graphical Models — Mini Project
+**Course Project — Carnegie Mellon University, 10-701 Machine Learning**
 
-**Goal:** A compact, reproducible project that demonstrates PhD-level readiness in **causal modeling** using simple **graphical models** (DAGs). It bridges *probabilistic* and *causal* semantics via a small set of experiments and estimators.
+This repository contains a small, self-contained project exploring the interface between **probabilistic graphical models** and **causal inference** using a simple chain DAG (A→B→C). It was developed to accompany course material on Bayesian networks, conditional independence, and causal identification.
 
 ## Contents
-- `src/generate_data.py` — synthetic data generators for a chain DAG (A→B→C) with optional confounding U.
-- `src/estimators.py` — identification-aware estimators: plug-in/back-door, IPW, AIPW, and front-door; plus utilities.
-- `src/em_missing_mediator.py` — EM for a **partially observed mediator B** in the chain DAG.
-- `experiments/run_chain_experiment.py` — end-to-end script to generate data, estimate effects, and save a figure.
-- `docs/` — figures produced by the experiments.
-- `requirements.txt` — lightweight dependencies.
+- `src/generate_data.py` — synthetic data generators for the chain DAG (A→B→C) with optional unobserved confounding `U` and a helper to mask the mediator.
+- `src/estimators.py` — estimators for interventional targets: naïve association, back-door plug‑in, **front‑door**, **IPW**, and **AIPW**; plus small utilities.
+- `src/em_missing_mediator.py` — EM routine for the case where the mediator `B` is partially missing (MAR).
+- `experiments/run_chain_experiment.py` — end‑to‑end script that generates data, estimates the ATE, and saves a comparison figure.
+- `experiments/run_sweep.py` — bias/variance sweeps across sample sizes and confounding settings; writes CSVs and plots.
+- `experiments/interactive_demo.ipynb` — lightweight widget demo (n, confounding, missing‑B).
+- `docs/` — figures produced by the experiments and a short `report.md`.
+- `requirements.txt` — minimal dependencies.
 
-## Highlights
-- **Identification vs estimation**: we compute the true interventional target \( P(C\mid do(A)) \) and compare it to:
-  - naive associational \( P(C\mid A) \) (biased under confounding),
-  - **back-door** (when a sufficient adjustment set exists),
-  - **front-door** (when confounding exists but a mediator opens identification),
-  - **IPW/AIPW** estimators.
-- **Graphical intuition**: the same DAG can be read probabilistically (Bayesian network) or causally; the project shows why the *do-operator* changes the answer.
-- **Missing data**: EM recovers parameters for \( P(B\mid A) \) and \( P(C\mid B) \) when B is missing-at-random, then plugs them into the identification formula.
+## Learning objectives
+- Distinguish **associational** quantities from **interventional** targets (do‑operator).
+- Apply **identification** on a DAG (back‑door and front‑door) before estimation.
+- Implement and compare classical estimators (plug‑in, IPW/AIPW) and handle missing mediators via **EM**.
+- Practice reproducibility (scripts/figures, tests, and CI).
 
 ## Quickstart
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv && source .venv/bin/activate    # or your preferred env
 pip install -r requirements.txt
-python experiments/run_chain_experiment.py
+python experiments/run_chain_experiment.py           # saves docs/chain_compare.png
+python experiments/run_sweep.py                      # saves sweep plots + CSVs
 ```
-Outputs go to `docs/` (including `chain_compare.png`).
+Optional interactive demo:
+```bash
+pip install ipywidgets
+# Open experiments/interactive_demo.ipynb in Jupyter
+```
 
-## What this demonstrates
-- Ability to **specify a causal estimand** (ATE) on a DAG and derive **identification** formulas.
-- Implementation of **classical estimators** (IPW/AIPW; front-door) and **EM** for missing mediators.
-- Clear experiments with **reproducible** code and plots.
+## Notes
+- The project is intentionally small and didactic: just enough code to connect **Bayesian-network** intuition with **causal** estimands on the same DAG.
+- Plots and a brief summary live in `docs/`. Tests in `tests/` provide a quick sanity check.
 
 MIT License © 2025
